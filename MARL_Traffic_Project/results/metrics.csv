@@ -1,0 +1,4 @@
+Model,Waiting,Queue,Throughput
+Fixed Time,55.0,4.46,477
+Independent DQN,42.35,3.21,548
+Proposed MARL,31.72,2.14,612

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARL Traffic Signal Control Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                </svg>
+            </div>
+            <div>
+                <span class="brand-title">MARL Traffic</span>
+                <span class="brand-sub">Signal Control System</span>
+            </div>
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item active" data-page="dashboard">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                <span>Dashboard</span>
+            </li>
+            <li class="nav-item" data-page="training">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>Training Monitor</span>
+            </li>
+            <li class="nav-item" data-page="topology">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><line x1="9" y1="6" x2="15" y2="6"/><line x1="6" y1="9" x2="6" y2="15"/><line x1="18" y1="9" x2="18" y2="15"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
+                <span>Network Topology</span>
+            </li>
+            <li class="nav-item" data-page="analytics">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Deep Analytics</span>
+            </li>
+            <li class="nav-item" data-page="configuration">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                <span>Configuration</span>
+            </li>
+            <li class="nav-item" data-page="intelligence">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/><line x1="9" y1="21" x2="15" y2="21"/></svg>
+                <span>Agent Intelligence</span>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="sys-info">
+                <span class="sys-label">Engine</span>
+                <span class="sys-val">PyTorch + SUMO</span>
+            </div>
+            <div class="sys-info">
+                <span class="sys-label">Grid</span>
+                <span class="sys-val">3x3 / 5x5</span>
+            </div>
+            <div class="sys-info">
+                <span class="sys-label">Agent</span>
+                <span class="sys-val">DQN (Ind. + MARL)</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content" id="content">
+
+        <!-- PAGE 1: DASHBOARD -->
+        <section class="page active" id="page-dashboard">
+            <div class="page-header">
+                <h1>Multi-Agent Reinforcement Learning for Traffic Control</h1>
+                <p>Real-time intelligent traffic signal optimisation comparing Independent DQN and Cooperative MARL on SUMO simulation</p>
+                <span class="data-badge demo" id="data-badge">Demo Data</span>
+            </div>
+            <div class="kpi-row" id="kpi-cards"></div>
+            <div class="grid-2col">
+                <div class="card">
+                    <h3 class="card-title">Model Performance Comparison</h3>
+                    <div id="chart-bar-comparison"></div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Multi-Metric Radar Profile</h3>
+                    <div id="chart-radar"></div>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Detailed Metrics</h3>
+                <div class="table-wrapper" id="metrics-table"></div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: TRAINING -->
+        <section class="page" id="page-training">
+            <div class="page-header">
+                <h1>Training Monitor</h1>
+                <p>Episode-by-episode reward curves, convergence analysis, and learning dynamics</p>
+            </div>
+            <div class="tab-bar" id="training-tabs">
+                <button class="tab-btn active" data-tab="tab-rewards">Reward Curves</button>
+                <button class="tab-btn" data-tab="tab-convergence">Convergence</button>
+                <button class="tab-btn" data-tab="tab-dynamics">Learning Dynamics</button>
+            </div>
+            <div class="tab-content active" id="tab-rewards">
+                <div class="controls-row">
+                    <label>Smoothing: <input type="range" id="smoothing-slider" min="1" max="20" value="5"><span id="smoothing-val">5</span></label>
+                </div>
+                <div class="card"><div id="chart-reward-curves"></div></div>
+            </div>
+            <div class="tab-content" id="tab-convergence">
+                <div class="grid-2col">
+                    <div class="card">
+                        <h3 class="card-title">Reward Distribution (Last 30 Episodes)</h3>
+                        <div id="chart-violin"></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Moving Average Convergence</h3>
+                        <div id="chart-ma-convergence"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="tab-dynamics">
+                <div class="grid-2col">
+                    <div class="card">
+                        <h3 class="card-title">Epsilon Decay Schedules</h3>
+                        <div id="chart-epsilon"></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">TD-Error / Loss Decay</h3>
+                        <div id="chart-loss"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Training Summary Statistics</h3>
+                    <div class="table-wrapper" id="training-stats-table"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: TOPOLOGY -->
+        <section class="page" id="page-topology">
+            <div class="page-header">
+                <h1>Network Topology and Intersection Analysis</h1>
+                <p>Visual representation of the traffic grid and per-intersection performance</p>
+            </div>
+            <div class="controls-row">
+                <label>Grid Size:
+                    <select id="grid-select">
+                        <option value="3">3 x 3</option>
+                        <option value="5">5 x 5</option>
+                    </select>
+                </label>
+                <label>Metric:
+                    <select id="topo-metric-select">
+                        <option value="waiting">Waiting Time</option>
+                        <option value="queue">Queue Length</option>
+                        <option value="throughput">Throughput</option>
+                        <option value="efficiency">Phase Efficiency</option>
+                    </select>
+                </label>
+                <label>Model:
+                    <select id="topo-model-select">
+                        <option value="Fixed Time">Fixed Time</option>
+                        <option value="Independent DQN">Independent DQN</option>
+                        <option value="Proposed MARL" selected>Proposed MARL</option>
+                    </select>
+                </label>
+            </div>
+            <div class="grid-2col">
+                <div class="card">
+                    <h3 class="card-title">Grid Heatmap</h3>
+                    <div id="chart-grid-heatmap"></div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Intersection Comparison</h3>
+                    <div id="chart-intersection-bars"></div>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Inter-Agent Coordination Matrix</h3>
+                <div id="chart-coordination"></div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: ANALYTICS -->
+        <section class="page" id="page-analytics">
+            <div class="page-header">
+                <h1>Deep Analytics</h1>
+                <p>Advanced statistical analysis, temporal patterns, and performance decomposition</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Queue Length Over Simulation Steps</h3>
+                <div id="chart-queue-temporal"></div>
+            </div>
+            <div class="grid-2col">
+                <div class="card">
+                    <h3 class="card-title">Cumulative Queue Burden</h3>
+                    <div id="chart-cumulative-queue"></div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Queue Distribution</h3>
+                    <div id="chart-queue-histogram"></div>
+                </div>
+            </div>
+            <div class="grid-2col">
+                <div class="card">
+                    <h3 class="card-title">Box Plot Comparison</h3>
+                    <div id="chart-boxplot"></div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Performance Decomposition</h3>
+                    <div id="chart-sunburst"></div>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Statistical Summary</h3>
+                <div class="table-wrapper" id="stats-summary-table"></div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: CONFIGURATION -->
+        <section class="page" id="page-configuration">
+            <div class="page-header">
+                <h1>Model Configuration</h1>
+                <p>Explore how different hyperparameters and architectures affect the agent design. Export settings as JSON for reproducibility.</p>
+            </div>
+            <div class="grid-2col">
+                <div class="card">
+                    <h3 class="card-title">Neural Network Architecture</h3>
+                    <div class="form-group">
+                        <label>Architecture Type</label>
+                        <select id="cfg-arch"><option>MLP (Fully Connected)</option><option>Dueling DQN</option><option>Double DQN</option><option>Attention-Based</option><option>Graph Neural Network</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Hidden Layers: <span id="cfg-layers-val">2</span></label>
+                        <input type="range" id="cfg-layers" min="1" max="5" value="2">
+                    </div>
+                    <div class="form-group">
+                        <label>Units per Layer</label>
+                        <select id="cfg-units"><option>32</option><option>64</option><option selected>128</option><option>256</option><option>512</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Activation</label>
+                        <select id="cfg-activation"><option>ReLU</option><option>LeakyReLU</option><option>GELU</option><option>Tanh</option><option>Swish</option></select>
+                    </div>
+                    <h3 class="card-title" style="margin-top:24px">Reward Shaping</h3>
+                    <div class="form-group">
+                        <label>Queue Weight: <span id="cfg-wq-val">1.0</span></label>
+                        <input type="range" id="cfg-wq" min="0" max="20" value="10" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Waiting Weight: <span id="cfg-ww-val">0.5</span></label>
+                        <input type="range" id="cfg-ww" min="0" max="20" value="5" step="1">
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Training Parameters</h3>
+                    <div class="form-group">
+                        <label>Learning Rate</label>
+                        <select id="cfg-lr"><option>1e-5</option><option>5e-5</option><option>1e-4</option><option>5e-4</option><option selected>1e-3</option><option>5e-3</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Discount Factor (gamma): <span id="cfg-gamma-val">0.99</span></label>
+                        <input type="range" id="cfg-gamma" min="900" max="999" value="990" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Batch Size</label>
+                        <select id="cfg-batch"><option>16</option><option>32</option><option selected>64</option><option>128</option><option>256</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Replay Buffer Size</label>
+                        <select id="cfg-buffer"><option>1000</option><option>5000</option><option selected>10000</option><option>50000</option><option>100000</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Episodes: <span id="cfg-eps-val">100</span></label>
+                        <input type="range" id="cfg-eps" min="10" max="500" value="100" step="10">
+                    </div>
+                    <h3 class="card-title" style="margin-top:24px">Exploration Strategy</h3>
+                    <div class="form-group">
+                        <label>Epsilon Strategy</label>
+                        <select id="cfg-eps-strat"><option>Linear Decay</option><option>Exponential Decay</option><option>Cosine Annealing</option><option>Boltzmann</option></select>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Architecture Visualisation</h3>
+                <div id="chart-architecture"></div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Configuration Export</h3>
+                <pre id="config-json-output" class="code-block"></pre>
+                <button class="btn-primary" id="download-config-btn">Download Config (JSON)</button>
+            </div>
+        </section>
+
+        <!-- PAGE 6: INTELLIGENCE -->
+        <section class="page" id="page-intelligence">
+            <div class="page-header">
+                <h1>Agent Intelligence Analysis</h1>
+                <p>Deep dive into agent decision-making, Q-value landscapes, and policy behaviour</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Q-Value Surface (Queue vs Wait State Space)</h3>
+                <div id="chart-qvalue-surface"></div>
+            </div>
+            <div class="grid-2col">
+                <div class="card">
+                    <h3 class="card-title">Q-Values by Action per Intersection</h3>
+                    <div id="chart-qvalue-bars"></div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Q-Value Heatmap: Intersection vs Action</h3>
+                    <div id="chart-qvalue-heatmap"></div>
+                </div>
+            </div>
+            <div class="grid-2col">
+                <div class="card">
+                    <h3 class="card-title">Action Selection Frequency</h3>
+                    <div id="chart-action-freq"></div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Global Action Distribution</h3>
+                    <div id="chart-action-pie"></div>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Agent Performance Ranking</h3>
+                <div id="chart-ranking-bars"></div>
+            </div>
+            <div class="grid-3col" id="gauge-container"></div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <p>MARL Traffic Signal Control &mdash; Multi-Agent Reinforcement Learning Dashboard</p>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
